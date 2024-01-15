@@ -1,0 +1,27 @@
+---
+# This manifest 'claims' the persistent volume for our pod,
+# isolating our Pod definition from our storage definition.
+
+# You can declare volumes directly inside a Pod specification, but
+# this locks that Pod specification to a particular volume provider.
+
+# By using volume claims, you can keep your Pod specifications cloud
+# -agnostic; simply create different volumes, specific to the cloud,
+# and use a PersistentVolumeClaim to bind them together.
+
+# Now that we’ve claimed our volume, we can use a
+# ReplicaSet to construct our singleton Pod.
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: database
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      volume: my-volume
